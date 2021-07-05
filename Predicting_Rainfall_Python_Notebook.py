@@ -40,7 +40,7 @@
 #  Save Model and Scaling object with Pickle
 
 
-# In[26]:
+# In[3]:
 
 
 #  Importing Necessary Libraries
@@ -61,7 +61,7 @@ rain = pd.read_csv(dataset)
 print (rain.head())
 
 
-# In[27]:
+# In[4]:
 
 
 # Checking the Dimension of the Dataset:
@@ -70,7 +70,7 @@ print (rain.head())
 print(rain.shape)
 
 
-# In[28]:
+# In[5]:
 
 
 # Data Preprocessing: 
@@ -88,7 +88,7 @@ print(rain.shape)
 print(rain.info())
 
 
-# In[29]:
+# In[6]:
 
 
 # We can see that except for the Date and The Location columns - every dataset has a missing value 
@@ -98,13 +98,13 @@ print(rain.info())
 rain.describe(exclude=object).transpose()
 
 
-# In[30]:
+# In[7]:
 
 
 rain.describe(include=object).transpose()
 
 
-# In[31]:
+# In[8]:
 
 
 # Finding Categorical and Numerical Features in the Dataset
@@ -118,7 +118,7 @@ print("Number of Categorical Features: {}".format(len(categorical_features))) # 
 print("Categorical Features:", categorical_features) # Names of Categorical Features
 
 
-# In[32]:
+# In[9]:
 
 
 # Numerical Feature in the Dataset
@@ -130,7 +130,7 @@ print("Number of Numerical Features: {}".format(len(numerical_features)))
 print("Numerical Features: ",numerical_features)
 
 
-# In[17]:
+# In[10]:
 
 
 # Cardinality check for Categorical features:
@@ -156,7 +156,7 @@ print("Numerical Features: ",numerical_features)
 #    Let’s find the cardinality for Categorical features:
 
 
-# In[33]:
+# In[11]:
 
 
 for each_feature in categorical_features:
@@ -164,7 +164,7 @@ for each_feature in categorical_features:
    print("Cardinality(no. of unique values) of {} are: {}".format(each_feature, unique_values))
 
 
-# In[34]:
+# In[12]:
 
 
 # Date column has high cardinality which poses several problems to the model in terms of efficiency 
@@ -182,7 +182,7 @@ rain.drop('Date', axis = 1, inplace = True)
 rain.head()
 
 
-# In[37]:
+# In[13]:
 
 
 # Handling Missing Values in Categorical Features 
@@ -192,7 +192,7 @@ categorical_features = [column_name for column_name in rain.columns if rain[colu
 rain[categorical_features].isnull().sum()
 
 
-# In[39]:
+# In[14]:
 
 
 # Imputing the missing values in Categorical Variables Using the most frequent Value (MODE)
@@ -204,13 +204,13 @@ for each_feature in categorical_features_with_null:
     rain[each_feature].fillna(mode_val,inplace=True)
 
 
-# In[41]:
+# In[15]:
 
 
 rain.Location.value_counts()
 
 
-# In[42]:
+# In[16]:
 
 
 # Handling Missing Values in Numerical Features
@@ -220,7 +220,7 @@ numerical_features = [column_name for column_name in rain.columns if rain[column
 rain[numerical_features].isnull().sum()
 
 
-# In[44]:
+# In[17]:
 
 
 # Missing Value in the Numerical Features can be Imputed as "Mean" or "Median".
@@ -243,7 +243,7 @@ for feature in features_with_outliers:
     rain.loc[rain[feature]>upper_limit,feature] = upper_limit    
 
 
-# In[46]:
+# In[18]:
 
 
 # The Numerical Values are free from Outliers - Imputing the misisng vaues with numerical Mean
@@ -254,7 +254,7 @@ for feature in numerical_features_with_null:
     rain[feature].fillna(mean_value,inplace=True)
 
 
-# In[48]:
+# In[19]:
 
 
 # Its now time to do some Exploratory Data Analysis
@@ -262,7 +262,7 @@ for feature in numerical_features_with_null:
 rain['RainTomorrow'].value_counts().plot(kind='bar')
 
 
-# In[50]:
+# In[20]:
 
 
 # Looks like the Target variable is imbalanced. It has more ‘No’ values. If data is imbalanced, 
@@ -276,7 +276,7 @@ rain['RainTomorrow'].value_counts().plot(kind='bar')
 sns.lineplot(data = rain, x='Sunshine', y='Rainfall', color = 'green')
 
 
-# In[52]:
+# In[21]:
 
 
 # Sunshine verus Rainfall
@@ -284,7 +284,7 @@ sns.lineplot(data = rain, x='Sunshine', y='Rainfall', color = 'green')
 sns.lineplot(data = rain, x='Sunshine', y='Evaporation', color = 'blue')
 
 
-# In[56]:
+# In[22]:
 
 
 # Encoding of Categorical Variables -- Feature Encoding. 
@@ -333,7 +333,7 @@ rain['Location'].replace(encode_data('Location'), inplace = True)
 rain.head()
 
 
-# In[105]:
+# In[23]:
 
 
 # Correlations 
@@ -342,7 +342,7 @@ plt.figure(figsize=(20,20))
 sns.heatmap(rain.corr(), linewidths=0.5, annot=False, fmt=".2f", cmap = 'viridis')
 
 
-# In[109]:
+# In[24]:
 
 
 correlation = rain.corr()
@@ -354,7 +354,7 @@ ax.set_yticklabels(ax.get_yticklabels(), rotation=30)
 plt.show()
 
 
-# In[111]:
+# In[25]:
 
 
 # MaxTemp,MinTemp,Temp9am,Temp3pm are highly correlated.
@@ -362,14 +362,14 @@ plt.show()
 # Sunshine, Cloud9am, Cloud3am are also highly correlated.
 
 
-# In[114]:
+# In[26]:
 
 
 sns.pairplot(rain[numerical_features], kind = 'scatter', diag_kind = 'hist', palette = 'Rainbow')
 plt.show()
 
 
-# In[60]:
+# In[27]:
 
 
 # For feature importance and feature scaling, we need to split data into independent and dependent features 
@@ -377,7 +377,7 @@ X = rain.drop(['RainTomorrow'],axis=1)
 y = rain['RainTomorrow']
 
 
-# In[62]:
+# In[28]:
 
 
 #  Feature Importance:
@@ -391,7 +391,7 @@ y = rain['RainTomorrow']
  #on various samples of the dataset and uses averaging to improve the predictive accuracy and control over-fitting.
 
 
-# In[64]:
+# In[30]:
 
 
 from sklearn.ensemble import ExtraTreesRegressor
@@ -400,24 +400,24 @@ etr_model.fit(X,y)
 etr_model.feature_importances_
 
 
-# In[66]:
+# In[ ]:
 
 
 feature_imp = pd.Series(etr_model.feature_importances_,index=X.columns)
 feature_imp.nlargest(10).plot(kind='barh')
 
 
-# In[68]:
+# In[35]:
 
 
 # Splitting Data into training and testing set
 # train_test_split() is a method of model_selection class used to split data into training and testing sets.
 
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.2, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.35, random_state = 0)
 
 
-# In[70]:
+# In[36]:
 
 
 # Length of Training and Testing set
@@ -425,7 +425,7 @@ print("Length of Training Data: {}".format(len(X_train)))
 print("Length of Testing Data: {}".format(len(X_test)))
 
 
-# In[73]:
+# In[37]:
 
 
 # Feature Scaling
@@ -439,19 +439,19 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 
 
-# In[75]:
+# In[38]:
 
 
 X_test = scaler.transform(X_test)
 
 
-# In[76]:
+# In[ ]:
 
 
 ### -------------------- MODEL BUILDING --------------------------###
 
 
-# In[77]:
+# In[ ]:
 
 
 # Logistic Regression algorithm to build a predictive model to predict whether or not it will rain tomorrow in Australia.
@@ -459,7 +459,7 @@ X_test = scaler.transform(X_test)
 # It allows us to predict the probability of an input belongs to a certain category.
 
 
-# In[148]:
+# In[39]:
 
 
 from sklearn.linear_model import LogisticRegression
@@ -468,16 +468,15 @@ model = classifier_logreg.fit(X_train, y_train)
 model
 
 
-# In[158]:
+# In[41]:
 
 
 # Model Testing
 
 y_pred = model.predict(X_test)
-y_pred
 
 
-# In[84]:
+# In[42]:
 
 
 # # Evaluating Model Performance:
@@ -487,7 +486,7 @@ from sklearn.metrics import accuracy_score
 print("Accuracy Score: {}".format(accuracy_score(y_test,y_pred)))
 
 
-# In[86]:
+# In[43]:
 
 
 # Checking for Underfitting and Overfitting:
@@ -496,14 +495,14 @@ print("Train Data Score: {}".format(classifier_logreg.score(X_train, y_train)))
 print("Test Data Score: {}".format(classifier_logreg.score(X_test, y_test)))
 
 
-# In[87]:
+# In[ ]:
 
 
 # The accuracy Score of training and testing data is comparable and almost equal. 
 # So, there is no question of underfitting and overfitting. And the model is generalizing well for new unseen data.
 
 
-# In[141]:
+# In[44]:
 
 
 # Confusion Matrix:
@@ -515,10 +514,16 @@ from sklearn.metrics import confusion_matrix
 print(confusion_matrix(y_test,y_pred))
 
 
-# In[163]:
+# In[47]:
 
 
 from sklearn.metrics import classification_report
 
 print(classification_report(y_test, y_pred))
+
+
+# In[48]:
+
+
+
 
